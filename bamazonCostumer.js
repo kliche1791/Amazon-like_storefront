@@ -26,6 +26,7 @@ var connection = mysql.createConnection({
     Start();
   });
 
+  //start the application by checking the products availables on the database 
   function Start(){
     console.log("Products Availables on The Store...\n");
     connection.query("SELECT * FROM products", function(err, res) {
@@ -41,6 +42,7 @@ var connection = mysql.createConnection({
 
   }
 
+  //
   function buyer(){
     inquirer
     .prompt({
@@ -73,14 +75,11 @@ var connection = mysql.createConnection({
         })
         .then(function(answer) {
 
-          // based on their answer, either call the bid or the post functions
           connection.query("SELECT * FROM products WHERE item_id=?", [id_item], function(err, res) {
             if (err) throw err;
-            // Log all results of the SELECT statement
-            console.log(id_item);
             
             for (var i = 0; i < res.length; i++) {
-                console.log("database "+res[i].stock_quantity);
+                
                 if (answer.quantity <= res[i].stock_quantity) {
                 
                     console.log("Your product is already delivered");
@@ -101,7 +100,6 @@ var connection = mysql.createConnection({
   }
 
   function prodAvailable(){
-    console.log(new_stock);
    connection.query(
         "UPDATE products SET stock_quantity = ? WHERE item_id = ?",
         [
